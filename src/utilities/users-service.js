@@ -1,7 +1,7 @@
 import debug from "debug";
 import * as usersAPI from "./users-api";
 
-const log = debug("mern:utilities:users-service");
+const log = debug("eventbunny:utilities:users-service");
 
 export function getToken() {
   // getItem returns null if there's no string
@@ -52,4 +52,8 @@ export const login = async (email, password) => {
 export const checkToken = async () => {
   const dateStr = await usersAPI.checkToken();
   return new Date(dateStr);
+};
+
+export const getUsers = async () => {
+  return await usersAPI.getUsers();
 };
