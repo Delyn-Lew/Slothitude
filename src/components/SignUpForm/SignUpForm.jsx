@@ -12,6 +12,7 @@ export default class SignUpForm extends Component {
     email: "",
     password: "",
     confirm: "",
+    role: "user",
     error: "",
   };
 
@@ -22,7 +23,6 @@ export default class SignUpForm extends Component {
   };
 
   handleSubmit = async (event) => {
-    // this.setState({ error: "" }); //clean up
     event.preventDefault();
     const formData = { ...this.state };
     delete formData.error;
@@ -112,6 +112,20 @@ export default class SignUpForm extends Component {
                 className="h-4 w-4 absolute right-3 top-12"
               />
             )}
+          </div>
+          <div className="m-0 p-0">
+            <label className="drop-shadow-sm text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col m-5 items-center">
+              Role:
+              <select
+                name="role"
+                value={this.state.role}
+                onChange={this.handleChange}
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              >
+                <option value="user">User</option>
+                <option value="studioOwner">Studio Owner</option>
+              </select>
+            </label>
           </div>
           <button
             type="submit"

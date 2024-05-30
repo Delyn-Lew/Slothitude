@@ -5,7 +5,8 @@ import NavBar from "../../components/NavBar/NavBar";
 import { getUser } from "../../utilities/users-service";
 import AuthPage from "../AuthPage/AuthPage";
 import NewOrderPage from "../NewOrderPage/NewOrderPage";
-import OrderHistoryPage from "../OrderHistoryPage/OrderHistoryPage";
+import HomePage from "../HomePage/HomePage";
+import "../../index.css";
 
 const log = debug("mern:pages:App:App");
 
@@ -27,13 +28,8 @@ function App() {
         <NavBar setUser={setUser} />
 
         <Routes>
-          <Route path="/orders" element={<OrderHistoryPage />} />
+          <Route path="/dashboard" element={<HomePage />} />
           <Route path="/orders/new" element={<NewOrderPage />} />
-
-          <Route path="/orders2" element={<OrderHistoryPage />}>
-            <Route path="new" element={<NewOrderPage />} />
-            <Route path="simon" element={<p>Simon</p>} />
-          </Route>
         </Routes>
       </main>
     </>

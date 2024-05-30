@@ -2,17 +2,17 @@ const debug = require("debug")("mern:controllers:api:usersController");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../../models/user");
-const { getUser } = require("../../config/checkToken");
+// const { getUser } = require("../../config/checkToken");
 
 const createJWT = (user) =>
   jwt.sign({ user }, process.env.SECRET, { expiresIn: "20m" });
 
 const create = async (req, res) => {
   debug("body: %o", req.body);
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
   try {
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email, password, role });
     debug("user: %o", user);
     const token = createJWT(user);
     res.status(201).json(token);
@@ -41,13 +41,20 @@ const login = async (req, res) => {
   }
 };
 
-const checkToken = (req, res) => {
-  const user = getUser(req, res); //res.locals.user;
-  res.json({ user });
+// const checkToken = (req, res) => {
+//   const user = getUser(req, res); //res.locals.user;
+//   res.json({ user });
+// };
+
+const index = async (req, res) => {
+  const users = await User.find();
+  debug("users %o:", users);
+  res.status(200).json(users);
 };
 
 module.exports = {
   create,
   login,
-  checkToken,
+  // checkToken,
+  index,
 };

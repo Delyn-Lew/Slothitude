@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
 const SALT_ROUNDS = 6;
@@ -20,6 +20,8 @@ const userSchema = new Schema(
       minLength: 3,
       required: true,
     },
+    role: { type: String },
+    // role: { type: String, enum: ["user", "studioOwner"], default: "user" },
   },
   {
     timestamps: true,
