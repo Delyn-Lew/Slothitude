@@ -20,8 +20,8 @@ const userSchema = new Schema(
       minLength: 3,
       required: true,
     },
-    role: { type: String },
-    // role: { type: String, enum: ["user", "studioOwner"], default: "user" },
+    // role: { type: String },
+    role: { type: String, enum: ["user", "studioOwner"], default: "user" },
   },
   {
     timestamps: true,
