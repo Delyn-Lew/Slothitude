@@ -1,4 +1,4 @@
-const debug = require("debug")("mern:controllers:api:classesController");
+const debug = require("debug")("slothitude:controllers:api:classesController");
 const Class = require("../../models/class");
 
 const create = async (req, res) => {

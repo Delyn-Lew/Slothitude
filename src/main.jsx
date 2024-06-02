@@ -4,7 +4,7 @@ import App from "./pages/App/App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 
-localStorage.debug = "mern:*";
+localStorage.debug = "slothitude:*";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

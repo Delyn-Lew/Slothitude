@@ -8,7 +8,7 @@ import NewOrderPage from "../NewOrderPage/NewOrderPage";
 import HomePage from "../HomePage/HomePage";
 import "../../index.css";
 
-const log = debug("mern:pages:App:App");
+const log = debug("slothitude:pages:App:App");
 
 function App() {
   const [user, setUser] = useState(getUser());

@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const logger = require("morgan");
-const debug = require("debug")("mern:server");
+const debug = require("debug")("slothitude:server");
 // Always require and configure near the top
 require("dotenv").config();
 require("./config/database");

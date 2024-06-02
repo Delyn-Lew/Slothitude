@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const debug = require("debug")("mern:config:database");
+const debug = require("debug")("slothitude:config:database");
 
 mongoose.set("debug", true);
 mongoose.connect(process.env.DATABASE_URL);

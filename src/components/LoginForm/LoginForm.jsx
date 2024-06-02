@@ -5,7 +5,7 @@ import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/16/solid";
 import Input from "../Input/Input";
 
-const log = debug("mern:components:LoginForm");
+const log = debug("slothitude:components:LoginForm");
 
 export default function LoginForm({
   setUser,

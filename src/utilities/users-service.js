@@ -1,7 +1,7 @@
 import debug from "debug";
 import * as usersAPI from "./users-api";
 
-const log = debug("eventbunny:utilities:users-service");
+const log = debug("slothitude:utilities:users-service");
 
 export function getToken() {
   // getItem returns null if there's no string

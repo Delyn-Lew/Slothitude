@@ -4,7 +4,7 @@ import { signUp } from "../../utilities/users-service";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/16/solid";
 import Input from "../Input/Input";
 
-const log = debug("mern:components:SignUpForm");
+const log = debug("slothitude:components:SignUpForm");
 
 export default class SignUpForm extends Component {
   state = {
