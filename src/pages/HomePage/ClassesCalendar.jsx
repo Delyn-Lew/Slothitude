@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { getToken } from "../../utilities/users-service";
 
 // initializes the localizer using moment.js to interpret dates and times
 const localizer = momentLocalizer(moment);
@@ -12,7 +13,14 @@ export default function ClassesCalendar() {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await fetch("/api/classes/booked");
+        const token = getToken(); // Get the token from local storage
+        if (!token) throw new Error("No token found");
+
+        const response = await fetch("/api/classes/booked", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
