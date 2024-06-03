@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
 import { getUser } from "../../utilities/users-service";
 import AuthPage from "../AuthPage/AuthPage";
-import NewOrderPage from "../NewOrderPage/NewOrderPage";
+import NewOrderPage from "../ClassesPage/ClassesPages";
 import HomePage from "../HomePage/HomePage";
 import "../../index.css";
 
