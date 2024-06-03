@@ -13,12 +13,12 @@ export default function ClassesCalendar() {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const token = getToken(); // Get the token from local storage
+        const token = getToken();
         if (!token) throw new Error("No token found");
 
         const response = await fetch("/api/classes/booked", {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            Authorization: `Bearer ${token}`,
           },
         });
         if (!response.ok) {
