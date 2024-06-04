@@ -9,7 +9,9 @@ export default function NavBar({ setUser }) {
 
   return (
     <nav>
-      <NavLink to="/dashboard">Home</NavLink>
+      <NavLink to="/dashboard">
+        <img src="Slothitude.png" className="h-12" alt="logo" />
+      </NavLink>
       &nbsp; | &nbsp;
       <NavLink to="/classes/avail">Available Classes</NavLink>
       &nbsp; | &nbsp;
