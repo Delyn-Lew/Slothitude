@@ -5,20 +5,33 @@ const log = debug("slothitude:utilities:users-service");
 
 export function getToken() {
   // getItem returns null if there's no string
-  const tokenObj = localStorage.getItem("token");
-  if (!tokenObj) return null;
+  const tokenObjStr = localStorage.getItem("token");
+  if (!tokenObjStr) {
+    log("No token found in localStorage.");
+    return null;
+  }
+
   // Parse the token object
-  let token;
+  let tokenObj;
   try {
-    token = JSON.parse(tokenObj).token;
+    tokenObj = JSON.parse(tokenObjStr);
+    log("Parsed token object: %o", tokenObj);
   } catch (e) {
     console.error("Error parsing token object:", e);
     return null;
   }
 
+  const token = tokenObj.token;
+  if (!token) {
+    console.error("Token property is missing in the parsed object.");
+    return null;
+  }
+
+  // Obtain the payload of the token
   let payload;
   try {
     payload = JSON.parse(atob(token.split(".")[1]));
+    log("Decoded payload: %o", payload);
   } catch (e) {
     console.error("Error decoding token:", e);
     return null;
