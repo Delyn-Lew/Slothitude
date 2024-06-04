@@ -5,10 +5,25 @@ const log = debug("slothitude:utilities:users-service");
 
 export function getToken() {
   // getItem returns null if there's no string
-  const token = localStorage.getItem("token");
-  if (!token) return null;
-  // Obtain the payload of the token
-  const payload = JSON.parse(atob(token.split(".")[1]));
+  const tokenObj = localStorage.getItem("token");
+  if (!tokenObj) return null;
+  // Parse the token object
+  let token;
+  try {
+    token = JSON.parse(tokenObj).token;
+  } catch (e) {
+    console.error("Error parsing token object:", e);
+    return null;
+  }
+
+  let payload;
+  try {
+    payload = JSON.parse(atob(token.split(".")[1]));
+  } catch (e) {
+    console.error("Error decoding token:", e);
+    return null;
+  }
+
   // A JWT's exp is expressed in seconds, not milliseconds, so convert
   if (payload.exp < Date.now() / 1000) {
     // Token has expired - remove it from localStorage
@@ -27,10 +42,10 @@ export function getUser() {
 export const signUp = async (userData) => {
   log("userData: %o", userData);
 
-  const token = await usersAPI.signUp(userData);
-  log("token: %o", token);
+  const tokenObj = await usersAPI.signUp(userData);
+  log("tokenObj: %o", tokenObj);
 
-  localStorage.setItem("token", token);
+  localStorage.setItem("token", JSON.stringify(tokenObj));
   return getUser();
 };
 
@@ -42,10 +57,10 @@ export const login = async (email, password) => {
   log("%s,%s", email, password);
   const user = { email, password };
 
-  const token = await usersAPI.login(user);
-  log("token: %o", token);
+  const tokenObj = await usersAPI.login(user);
+  log("tokenObj: %o", tokenObj);
 
-  localStorage.setItem("token", token);
+  localStorage.setItem("token", JSON.stringify(tokenObj));
   return getUser();
 };
 
