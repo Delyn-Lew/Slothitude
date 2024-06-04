@@ -4,14 +4,12 @@ import * as usersAPI from "./users-api";
 const log = debug("slothitude:utilities:users-service");
 
 export function getToken() {
-  // getItem returns null if there's no string
   const tokenObjStr = localStorage.getItem("token");
   if (!tokenObjStr) {
     log("No token found in localStorage.");
     return null;
   }
 
-  // Parse the token object
   let tokenObj;
   try {
     tokenObj = JSON.parse(tokenObjStr);
@@ -27,7 +25,6 @@ export function getToken() {
     return null;
   }
 
-  // Obtain the payload of the token
   let payload;
   try {
     payload = JSON.parse(atob(token.split(".")[1]));
@@ -37,9 +34,7 @@ export function getToken() {
     return null;
   }
 
-  // A JWT's exp is expressed in seconds, not milliseconds, so convert
   if (payload.exp < Date.now() / 1000) {
-    // Token has expired - remove it from localStorage
     localStorage.removeItem("token");
     return null;
   }
@@ -48,7 +43,6 @@ export function getToken() {
 
 export function getUser() {
   const token = getToken();
-  // If there's a token, return the user in the payload, otherwise return null
   return token ? JSON.parse(atob(token.split(".")[1])).user : null;
 }
 
@@ -63,6 +57,7 @@ export const signUp = async (userData) => {
     return getUser();
   } else {
     console.error("No token in server response.");
+    log("Complete server response: %o", response);
     return null;
   }
 };
@@ -83,6 +78,7 @@ export const login = async (email, password) => {
     return getUser();
   } else {
     console.error("No token in server response.");
+    log("Complete server response: %o", response);
     return null;
   }
 };

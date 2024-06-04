@@ -15,7 +15,7 @@ const create = async (req, res) => {
     const user = await User.create({ name, email, password, role });
     debug("user: %o", user);
     const token = createJWT(user);
-    res.status(201).json(token);
+    res.status(201).json({ token, role: user.role }); // return token and user's role
   } catch (error) {
     debug("error: %o", error);
     res.status(500).json({ error });
@@ -24,20 +24,25 @@ const create = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
 
-  if (user === null) {
-    res.status(401).json({ msg: "User not found" });
-    return;
-  }
+  try {
+    const user = await User.findOne({ email });
 
-  const match = await bcrypt.compare(password, user.password);
+    if (!user) {
+      return res.status(401).json({ msg: "User not found" });
+    }
 
-  if (match) {
-    const token = createJWT(user);
-    res.json(token);
-  } else {
-    res.status(401).json({ msg: "Password incorrect" });
+    const match = await bcrypt.compare(password, user.password);
+
+    if (match) {
+      const token = createJWT(user);
+      res.json({ token, role: user.role });
+    } else {
+      res.status(401).json({ msg: "Password incorrect" });
+    }
+  } catch (error) {
+    debug("error: %o", error);
+    res.status(500).json({ error });
   }
 };
 
