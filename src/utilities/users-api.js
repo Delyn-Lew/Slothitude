@@ -8,8 +8,8 @@ export function signUp(userData) {
   return sendRequest(BASE_URL, "POST", userData);
 }
 
-export function login(credentials) {
-  return sendRequest(`${BASE_URL}/login`, "POST", credentials);
+export function login(userData) {
+  return sendRequest(`${BASE_URL}/login`, "POST", userData);
 }
 
 export function checkToken() {

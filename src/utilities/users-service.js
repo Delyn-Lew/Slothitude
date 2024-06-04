@@ -55,11 +55,16 @@ export function getUser() {
 export const signUp = async (userData) => {
   log("userData: %o", userData);
 
-  const tokenObj = await usersAPI.signUp(userData);
-  log("tokenObj: %o", tokenObj);
+  const response = await usersAPI.signUp(userData);
+  log("server response: %o", response);
 
-  localStorage.setItem("token", JSON.stringify(tokenObj));
-  return getUser();
+  if (response.token) {
+    localStorage.setItem("token", JSON.stringify(response));
+    return getUser();
+  } else {
+    console.error("No token in server response.");
+    return null;
+  }
 };
 
 export const logOut = () => {
@@ -70,11 +75,16 @@ export const login = async (email, password) => {
   log("%s,%s", email, password);
   const user = { email, password };
 
-  const tokenObj = await usersAPI.login(user);
-  log("tokenObj: %o", tokenObj);
+  const response = await usersAPI.login(user);
+  log("server response: %o", response);
 
-  localStorage.setItem("token", JSON.stringify(tokenObj));
-  return getUser();
+  if (response.token) {
+    localStorage.setItem("token", JSON.stringify(response));
+    return getUser();
+  } else {
+    console.error("No token in server response.");
+    return null;
+  }
 };
 
 export const checkToken = async () => {
