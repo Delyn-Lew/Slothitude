@@ -5,6 +5,9 @@ const BASE_URL = "/api/classes";
 export function fetchClasses() {
   return sendRequest(BASE_URL);
 }
+export function fetchBookedClasses() {
+  return sendRequest(`${BASE_URL}/booked`);
+}
 
 export function fetchClassById(classId) {
   return sendRequest(`${BASE_URL}/${classId}`);
