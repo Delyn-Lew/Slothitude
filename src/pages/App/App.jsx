@@ -4,9 +4,9 @@ import { Route, Routes } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
 import { getUser } from "../../utilities/users-service";
 import AuthPage from "../AuthPage/AuthPage";
-import NewOrderPage from "../ClassesPage/ClassesPages";
 import HomePage from "../HomePage/HomePage";
 import "../../index.css";
+import ClassesPage from "../ClassesPage/ClassesPages";
 
 const log = debug("slothitude:pages:App:App");
 
@@ -25,11 +25,11 @@ function App() {
   return (
     <>
       <main className="App">
-        <NavBar setUser={setUser} />
+        <NavBar setUser={(setUser, user)} />
 
         <Routes>
           <Route path="/dashboard" element={<HomePage />} />
-          <Route path="/orders/new" element={<NewOrderPage />} />
+          <Route path="/classes/avail" element={<ClassesPage />} />
         </Routes>
       </main>
     </>
