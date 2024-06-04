@@ -21,7 +21,7 @@ app.get("/api", (req, res) => {
   res.json({ hello: "world" });
 });
 app.use("/api/users", require("./routes/api/usersRoutes"));
-
+app.use("/api/classes", require("./routes/api/classesRoutes"));
 // The following "catch all" route (note the *) is necessary
 // to return the index.html on all non-AJAX requests
 app.get("/*", function (req, res) {
