@@ -9,6 +9,8 @@ export default function NavBar({ setUser }) {
 
   return (
     <nav>
+      <NavLink to="/dashboard">Home</NavLink>
+      &nbsp; | &nbsp;
       <NavLink to="/classes/avail">Available Classes</NavLink>
       &nbsp; | &nbsp;
       <Link to="" onClick={handleLogOut}>
