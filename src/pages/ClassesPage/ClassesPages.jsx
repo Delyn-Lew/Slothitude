@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import debug from "debug";
 import { fetchClasses } from "../../utilities/classes-service";
+import AddClassForm from "./AddClassForm";
 
 const log = debug("slothitude:pages:ClassesPage");
 
@@ -31,10 +32,19 @@ export default function ClassesPage() {
     navigate(`/classes/${classId}`);
   };
 
+  const handleAddClass = async () => {
+    try {
+      await fetchClasses();
+    } catch (error) {
+      console.error("Error adding class:", error);
+    }
+  };
+
   return (
     <div className="flex justify-center">
       <section className="text-xl bg-white bg-opacity-80 w-[100rem] p-5 rounded-lg flex flex-col justify-center items-center drop-shadow-xl">
         <h2 className="text-center">Available Classes</h2>
+        <AddClassForm onAddClass={handleAddClass} />
         {availableClasses.length > 0 ? (
           <ul>
             {availableClasses.map((classItem) => (
