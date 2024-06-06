@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import debug from "debug";
-import { fetchClasses } from "../../utilities/classes-service";
+import { fetchClasses, deleteClass } from "../../utilities/classes-service";
 
 const log = debug("slothitude:pages:ClassesPage");
 
@@ -35,6 +35,17 @@ export default function ClassesPage() {
     navigate("/add-class");
   };
 
+  const handleDeleteClass = async (classId) => {
+    try {
+      await deleteClass(classId);
+      setAvailableClasses((prevClasses) =>
+        prevClasses.filter((classItem) => classItem._id !== classId)
+      );
+    } catch (error) {
+      console.error("Error deleting class:", error);
+    }
+  };
+
   return (
     <div className="flex justify-center">
       <section className="text-xl bg-white bg-opacity-80 w-[100rem] p-5 rounded-lg flex flex-col justify-center items-center drop-shadow-xl">
@@ -50,23 +61,28 @@ export default function ClassesPage() {
             {availableClasses.map((classItem) => (
               <li
                 key={classItem._id}
-                onClick={() => handleClickClass(classItem._id)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  padding: "10px",
-                  border: "1px solid #ccc",
-                  borderRadius: "5px",
-                }}
+                className="flex justify-between items-center border-b border-gray-200 py-2"
               >
-                <h3>{classItem.name}</h3>
-                <p>{classItem.description}</p>
-                <p>Date: {new Date(classItem.date).toLocaleDateString()}</p>
-                <p>Time: {new Date(classItem.date).toLocaleTimeString()}</p>
-                <p>Location: {classItem.location}</p>
-                <p>Instructor: {classItem.instructor}</p>
-                <p>Duration: {classItem.duration} minutes</p>
-                <p>Capacity: {classItem.capacity}</p>
+                <div
+                  onClick={() => handleClickClass(classItem._id)}
+                  style={{ cursor: "pointer" }}
+                  className="flex-1"
+                >
+                  <h3 className="font-bold">{classItem.name}</h3>
+                  <p>{classItem.description}</p>
+                  <p>Date: {new Date(classItem.date).toLocaleString()}</p>
+                  <p>Time: {new Date(classItem.date).toLocaleTimeString()}</p>
+                  <p>Location: {classItem.location}</p>
+                  <p>Instructor: {classItem.instructor}</p>
+                  <p>Duration: {classItem.duration} minutes</p>
+                  <p>Capacity: {classItem.capacity}</p>
+                </div>
+                <button
+                  onClick={() => handleDeleteClass(classItem._id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded ml-4"
+                >
+                  Delete
+                </button>
               </li>
             ))}
           </ul>

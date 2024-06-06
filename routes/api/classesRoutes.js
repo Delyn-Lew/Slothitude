@@ -6,5 +6,6 @@ const ensureLoggedIn = require("../../config/ensureLoggedIn");
 router.post("/", [ensureLoggedIn], classesCtrl.create);
 router.get("/", [ensureLoggedIn], classesCtrl.getAll);
 router.get("/booked", [ensureLoggedIn], classesCtrl.getBookedClasses);
+router.delete("/:id", [ensureLoggedIn], classesCtrl.deleteClass);
 
 module.exports = router;
