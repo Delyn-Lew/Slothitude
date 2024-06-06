@@ -4,71 +4,64 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { getToken } from "../../utilities/users-service";
 
-// initializes the localizer using moment.js to interpret dates and times
+// Initialize localizer using moment.js to interpret dates and times
 const localizer = momentLocalizer(moment);
 
-export default function ClassesCalendar() {
-  const [events, setEvents] = useState([]);
+const ClassCalendar = () => {
+  const [classes, setClasses] = useState([]);
 
   useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const token = getToken();
-        if (!token) throw new Error("No token found");
-
-        const response = await fetch("/api/classes/booked", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const classes = await response.json();
-        const eventList = classes.map((classItem) => ({
-          title: classItem.name,
-          start: new Date(classItem.date),
-          end: new Date(classItem.date),
-        }));
-        setEvents(eventList);
-      } catch (error) {
-        console.error("Error fetching classes:", error);
-      }
-    };
-
     fetchClasses();
   }, []);
 
-  const eventStyleGetter = (event, start, end, isSelected) => {
-    let backgroundColor = "#3174ad";
-    if (isSelected) {
-      backgroundColor = "#f00"; // Change color if selected
-    }
-    const style = {
-      backgroundColor: backgroundColor,
-      borderRadius: "0.25rem",
-      opacity: 0.8,
-      color: "white",
-      border: "0px",
-      display: "block",
-    };
+  // Fetch classes from the backend API
+  const fetchClasses = async () => {
+    try {
+      const token = getToken();
+      if (!token) throw new Error("No token found");
 
-    return {
-      style: style,
-    };
+      const response = await fetch("/api/classes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch classes");
+      }
+      const data = await response.json();
+      console.log("Fetched classes:", data); // Log fetched data
+      setClasses(data);
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+    }
   };
 
+  console.log("Classes:", classes); // Log classes to verify data
+
+  // Convert start and end dates to JavaScript Date objects
+  const events = classes.map((classItem) => ({
+    id: classItem._id,
+    title: classItem.name,
+    start: new Date(classItem.date), // Convert to Date object
+    end: new Date(classItem.date), // Convert to Date object
+  }));
+
+  console.log("Events:", events); // Log events to verify date conversion
   return (
-    <div className="container mx-auto my-4 p-4 bg-white shadow-md rounded">
-      <h2 className="text-2xl font-bold mb-4">My Booked Classes</h2>
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 500 }}
-        eventPropGetter={eventStyleGetter}
-      />
+    <div>
+      {classes.length === 0 ? (
+        <p>No classes available</p>
+      ) : (
+        <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start" // Ensure this matches the property name in the event objects
+          endAccessor="end" // Ensure this matches the property name in the event objects
+          style={{ height: 500 }}
+        />
+      )}
     </div>
   );
-}
+};
+
+export default ClassCalendar;

@@ -2,30 +2,27 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import debug from "debug";
 import { fetchClasses, deleteClass } from "../../utilities/classes-service";
+import { createBooking } from "../../utilities/bookings-service";
 
 const log = debug("slothitude:pages:ClassesPage");
 
-export default function ClassesPage() {
+export default function ClassesPage({ userId }) {
   const [availableClasses, setAvailableClasses] = useState([]);
-  const [isFetched, setIsFetched] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const getClasses = async () => {
-      if (isFetched) return;
-
       try {
         log("Fetching available classes");
         const classes = await fetchClasses();
         log("Fetched classes:", classes);
         setAvailableClasses(classes);
-        setIsFetched(true);
       } catch (error) {
         log("Error fetching classes", error);
       }
     };
     getClasses();
-  }, [isFetched]);
+  }, []);
 
   const handleClickClass = (classId) => {
     navigate(`/classes/${classId}`);
@@ -43,6 +40,24 @@ export default function ClassesPage() {
       );
     } catch (error) {
       console.error("Error deleting class:", error);
+    }
+  };
+
+  const handleBookClass = async (classId) => {
+    try {
+      const bookingData = {
+        classId,
+        userId,
+        status: "booked",
+      };
+      await createBooking(bookingData);
+      log("Class booked successfully");
+
+      // Fetch updated list of available classes
+      const classes = await fetchClasses();
+      setAvailableClasses(classes);
+    } catch (error) {
+      console.error("Error booking class:", error);
     }
   };
 
@@ -77,12 +92,20 @@ export default function ClassesPage() {
                   <p>Duration: {classItem.duration} minutes</p>
                   <p>Capacity: {classItem.capacity}</p>
                 </div>
-                <button
-                  onClick={() => handleDeleteClass(classItem._id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded ml-4"
-                >
-                  Delete
-                </button>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleDeleteClass(classItem._id)}
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => handleBookClass(classItem._id, userId)}
+                    className="bg-green-500 text-white px-4 py-2 rounded"
+                  >
+                    Book
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
