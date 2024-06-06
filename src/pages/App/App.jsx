@@ -7,6 +7,7 @@ import AuthPage from "../AuthPage/AuthPage";
 import HomePage from "../HomePage/HomePage";
 import "../../index.css";
 import ClassesPage from "../ClassesPage/ClassesPages";
+import AddClassPage from "../ClassesPage/AddClassPage";
 
 const log = debug("slothitude:pages:App:App");
 
@@ -30,6 +31,7 @@ function App() {
         <Routes>
           <Route path="/dashboard" element={<HomePage />} />
           <Route path="/classes/avail" element={<ClassesPage />} />
+          <Route path="/add-class" element={<AddClassPage />} />
         </Routes>
       </main>
     </>
