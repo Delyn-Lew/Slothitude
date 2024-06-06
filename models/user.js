@@ -21,7 +21,12 @@ const userSchema = new Schema(
       required: true,
     },
     // role: { type: String },
-    role: { type: String, enum: ["user", "studioOwner"], default: "user" },
+    role: {
+      type: String,
+      required: true,
+      enum: ["user", "studioOwner"],
+      default: "user",
+    },
   },
   {
     timestamps: true,
