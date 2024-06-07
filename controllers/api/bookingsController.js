@@ -1,18 +1,16 @@
-// const debug = require("debug")("slothitude:controllers:api:bookingsController");
+const debug = require("debug")("slothitude:controllers:api:bookingsController");
 const Booking = require("../../models/booking");
 const Class = require("../../models/class");
 
 const create = async (req, res) => {
   try {
-    const { classId } = req.params;
-    const userId = req.user._id;
-
-    const newBooking = await Booking.create({ classId, userId });
-    await Class.findByIdAndUpdate(classId, { $inc: { bookedCount: 1 } });
-
+    const bookingData = req.body;
+    debug("Received booking data: %o", bookingData);
+    const newBooking = await Booking.create(bookingData);
     res.status(201).json(newBooking);
   } catch (error) {
-    res.status(500).json({ error });
+    debug("Error creating booking: %o", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
