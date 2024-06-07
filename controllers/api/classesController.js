@@ -44,9 +44,22 @@ const deleteClass = async (req, res) => {
   }
 };
 
+const getClassById = async (req, res) => {
+  try {
+    const classItem = await Class.findById(req.params.id);
+    if (!classItem) {
+      return res.status(404).json({ error: "Class not found" });
+    }
+    res.json(classItem);
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 module.exports = {
   create,
   getAll,
   getBookedClasses,
   deleteClass,
+  getClassById,
 };

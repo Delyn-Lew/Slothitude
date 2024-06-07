@@ -6,9 +6,11 @@ import { createBooking } from "../../utilities/bookings-service";
 
 const log = debug("slothitude:pages:ClassesPage");
 
-export default function ClassesPage({ userId }) {
+export default function ClassesPage({ user }) {
   const [availableClasses, setAvailableClasses] = useState([]);
   const navigate = useNavigate();
+  const userId = user ? user._id : null;
+  const role = user ? user.role : null;
 
   useEffect(() => {
     const getClasses = async () => {
@@ -65,12 +67,14 @@ export default function ClassesPage({ userId }) {
     <div className="flex justify-center">
       <section className="text-xl bg-white bg-opacity-80 w-[100rem] p-5 rounded-lg flex flex-col justify-center items-center drop-shadow-xl">
         <h2 className="text-center">Available Classes</h2>
-        <button
-          onClick={handleAddClass}
-          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Add Class
-        </button>
+        {role === "studioOwner" && (
+          <button
+            onClick={handleAddClass}
+            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Add Class
+          </button>
+        )}
         {availableClasses.length > 0 ? (
           <ul>
             {availableClasses.map((classItem) => (
@@ -85,7 +89,7 @@ export default function ClassesPage({ userId }) {
                 >
                   <h3 className="font-bold">{classItem.name}</h3>
                   <p>{classItem.description}</p>
-                  <p>Date: {new Date(classItem.date).toLocaleString()}</p>
+                  <p>Date: {new Date(classItem.date).toLocaleDateString()}</p>
                   <p>Time: {new Date(classItem.date).toLocaleTimeString()}</p>
                   <p>Location: {classItem.location}</p>
                   <p>Instructor: {classItem.instructor}</p>
@@ -93,18 +97,22 @@ export default function ClassesPage({ userId }) {
                   <p>Capacity: {classItem.capacity}</p>
                 </div>
                 <div className="flex space-x-2">
-                  <button
-                    onClick={() => handleDeleteClass(classItem._id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => handleBookClass(classItem._id, userId)}
-                    className="bg-green-500 text-white px-4 py-2 rounded"
-                  >
-                    Book
-                  </button>
+                  {role === "studioOwner" && (
+                    <button
+                      onClick={() => handleDeleteClass(classItem._id)}
+                      className="bg-red-500 text-white px-4 py-2 rounded"
+                    >
+                      Delete
+                    </button>
+                  )}
+                  {role !== "studioOwner" && (
+                    <button
+                      onClick={() => handleBookClass(classItem._id)}
+                      className="bg-green-500 text-white px-4 py-2 rounded"
+                    >
+                      Book
+                    </button>
+                  )}
                 </div>
               </li>
             ))}

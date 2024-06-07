@@ -1,13 +1,13 @@
 import debug from "debug";
 import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
-import NavBar from "../../components/NavBar/NavBar";
-import { getUser } from "../../utilities/users-service";
+import { Route, Routes, Navigate } from "react-router-dom";
 import AuthPage from "../AuthPage/AuthPage";
-import HomePage from "../HomePage/HomePage";
-import "../../index.css";
 import ClassesPage from "../ClassesPage/ClassesPages";
+import { getUser } from "../../utilities/users-service";
+import NavBar from "../../components/NavBar/NavBar";
 import AddClassPage from "../ClassesPage/AddClassPage";
+import HomePage from "../HomePage/HomePage";
+import ClassDetails from "../ClassesPage/ClassDetails"; // Make sure this path is correct
 
 const log = debug("slothitude:pages:App:App");
 
@@ -24,17 +24,16 @@ function App() {
   }
 
   return (
-    <>
-      <main className="App">
-        <NavBar setUser={(setUser, user)} />
-
-        <Routes>
-          <Route path="/dashboard" element={<HomePage />} />
-          <Route path="/classes/avail" element={<ClassesPage />} />
-          <Route path="/add-class" element={<AddClassPage />} />
-        </Routes>
-      </main>
-    </>
+    <main className="App">
+      <NavBar user={user} setUser={setUser} />
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/dashboard" element={<HomePage />} />
+        <Route path="/classes/avail" element={<ClassesPage user={user} />} />
+        <Route path="/add-class" element={<AddClassPage />} />
+        <Route path="/classes/:id" element={<ClassDetails user={user} />} />
+      </Routes>
+    </main>
   );
 }
 

@@ -4,24 +4,9 @@ import * as usersAPI from "./users-api";
 const log = debug("slothitude:utilities:users-service");
 
 export function getToken() {
-  const tokenObjStr = localStorage.getItem("token");
-  if (!tokenObjStr) {
-    log("No token found in localStorage.");
-    return null;
-  }
-
-  let tokenObj;
-  try {
-    tokenObj = JSON.parse(tokenObjStr);
-    log("Parsed token object: %o", tokenObj);
-  } catch (e) {
-    console.error("Error parsing token object:", e);
-    return null;
-  }
-
-  const token = tokenObj.token;
+  const token = localStorage.getItem("token");
   if (!token) {
-    console.error("Token property is missing in the parsed object.");
+    log("No token found in localStorage.");
     return null;
   }
 
@@ -53,7 +38,8 @@ export const signUp = async (userData) => {
   log("server response: %o", response);
 
   if (response.token) {
-    localStorage.setItem("token", JSON.stringify(response));
+    localStorage.setItem("token", response.token);
+    localStorage.setItem("role", response.role);
     return getUser();
   } else {
     console.error("No token in server response.");
@@ -64,6 +50,7 @@ export const signUp = async (userData) => {
 
 export const logOut = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("role");
 };
 
 export const login = async (email, password) => {
@@ -74,7 +61,8 @@ export const login = async (email, password) => {
   log("server response: %o", response);
 
   if (response.token) {
-    localStorage.setItem("token", JSON.stringify(response));
+    localStorage.setItem("token", response.token);
+    localStorage.setItem("role", response.role);
     return getUser();
   } else {
     console.error("No token in server response.");
