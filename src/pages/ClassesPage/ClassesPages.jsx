@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import debug from "debug";
 import { fetchClasses, deleteClass } from "../../utilities/classes-service";
-import { createBooking } from "../../utilities/bookings-service";
+import { createBooking, cancelBooking } from "../../utilities/bookings-service";
 
 const log = debug("slothitude:pages:ClassesPage");
 
@@ -47,6 +47,16 @@ export default function ClassesPage({ user }) {
 
   const handleBookClass = async (classId) => {
     try {
+      const isAlreadyBooked = availableClasses.find(
+        (classItem) =>
+          classItem._id === classId && classItem.bookedUsers.includes(userId)
+      );
+
+      if (isAlreadyBooked) {
+        console.log("You are already booked into this class.");
+        return;
+      }
+
       const bookingData = {
         classId,
         userId,
@@ -55,11 +65,22 @@ export default function ClassesPage({ user }) {
       await createBooking(bookingData);
       log("Class booked successfully");
 
-      // Fetch updated list of available classes
       const classes = await fetchClasses();
       setAvailableClasses(classes);
     } catch (error) {
       console.error("Error booking class:", error);
+    }
+  };
+
+  const handleCancelBooking = async (classId) => {
+    try {
+      await cancelBooking(classId, userId);
+      log("Booking canceled successfully");
+
+      const classes = await fetchClasses();
+      setAvailableClasses(classes);
+    } catch (error) {
+      console.error("Error canceling booking:", error);
     }
   };
 
@@ -105,7 +126,15 @@ export default function ClassesPage({ user }) {
                       Delete
                     </button>
                   )}
-                  {role !== "studioOwner" && (
+                  {role !== "studioOwner" &&
+                  classItem.bookedUsers.includes(userId) ? (
+                    <button
+                      onClick={() => handleCancelBooking(classItem._id)}
+                      className="bg-red-500 text-white px-4 py-2 rounded"
+                    >
+                      Cancel
+                    </button>
+                  ) : (
                     <button
                       onClick={() => handleBookClass(classItem._id)}
                       className="bg-green-500 text-white px-4 py-2 rounded"

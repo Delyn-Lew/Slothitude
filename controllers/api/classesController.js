@@ -1,5 +1,6 @@
 const debug = require("debug")("slothitude:controllers:api:classesController");
 const Class = require("../../models/class");
+const Booking = require("../../models/booking");
 
 const create = async (req, res) => {
   try {
@@ -14,10 +15,27 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const classes = await Class.find({});
-    res.status(200).json(classes);
+    const classes = await Class.find();
+
+    const populatedClasses = await Promise.all(
+      classes.map(async (classItem) => {
+        const bookings = await Booking.find({ classId: classItem._id }).select(
+          "userId"
+        );
+
+        const bookedUsers = bookings.map((booking) => booking.userId);
+
+        return {
+          ...classItem.toJSON(),
+          bookedUsers,
+        };
+      })
+    );
+
+    res.json(populatedClasses);
   } catch (error) {
-    res.status(500).json({ error });
+    debug("Error fetching classes:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };
 

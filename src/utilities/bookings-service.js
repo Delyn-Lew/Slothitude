@@ -25,3 +25,19 @@ export const getBookings = async () => {
     log("Error fetching bookings: %o", error);
   }
 };
+
+export const cancelBooking = async (classId, userId) => {
+  try {
+    const response = await fetch(`/api/bookings/${classId}/${userId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to cancel booking");
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error("Error canceling booking:", error);
+  }
+};
