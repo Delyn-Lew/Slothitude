@@ -34,8 +34,24 @@ const getBookedClasses = async (req, res) => {
   }
 };
 
+const cancelBooking = async (req, res) => {
+  try {
+    const { classId, userId } = req.params;
+    debug("Canceling booking for classId: %s, userId: %s", classId, userId);
+    const booking = await Booking.findOneAndDelete({ classId, userId });
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+    res.status(200).json({ message: "Booking canceled successfully" });
+  } catch (error) {
+    debug("Error canceling booking: %o", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   create,
   getByUser,
   getBookedClasses,
+  cancelBooking,
 };
