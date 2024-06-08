@@ -127,21 +127,21 @@ export default function ClassesPage({ user }) {
                     </button>
                   )}
                   {role !== "studioOwner" &&
-                  classItem.bookedUsers.includes(userId) ? (
-                    <button
-                      onClick={() => handleCancelBooking(classItem._id)}
-                      className="bg-red-500 text-white px-4 py-2 rounded"
-                    >
-                      Cancel
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleBookClass(classItem._id)}
-                      className="bg-green-500 text-white px-4 py-2 rounded"
-                    >
-                      Book
-                    </button>
-                  )}
+                    (classItem.bookedUsers.includes(userId) ? (
+                      <button
+                        onClick={() => handleCancelBooking(classItem._id)}
+                        className="bg-red-500 text-white px-4 py-2 rounded"
+                      >
+                        Cancel
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleBookClass(classItem._id)}
+                        className="bg-green-500 text-white px-4 py-2 rounded"
+                      >
+                        Book
+                      </button>
+                    ))}
                 </div>
               </li>
             ))}
