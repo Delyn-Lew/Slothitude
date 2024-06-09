@@ -5,6 +5,27 @@ const Class = require("../../models/class");
 const create = async (req, res) => {
   try {
     const bookingData = req.body;
+    const classId = bookingData.classId;
+    const userId = bookingData.userId;
+
+    const classItem = await Class.findById(classId);
+    if (!classItem) {
+      return res.status(404).json({ error: "Class not found" });
+    }
+
+    const bookingCount = await Booking.countDocuments({ classId });
+
+    if (bookingCount >= classItem.capacity) {
+      return res.status(400).json({ error: "Class is fully booked" });
+    }
+
+    const existingBooking = await Booking.findOne({ classId, userId });
+    if (existingBooking) {
+      return res
+        .status(400)
+        .json({ error: "You have already booked this class" });
+    }
+
     debug("Received booking data: %o", bookingData);
     const newBooking = await Booking.create(bookingData);
     res.status(201).json(newBooking);

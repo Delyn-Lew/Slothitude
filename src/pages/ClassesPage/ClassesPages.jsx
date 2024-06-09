@@ -47,13 +47,27 @@ export default function ClassesPage({ user }) {
 
   const handleBookClass = async (classId) => {
     try {
-      const isAlreadyBooked = availableClasses.find(
-        (classItem) =>
-          classItem._id === classId && classItem.bookedUsers.includes(userId)
+      // Find the class details
+      const classToBook = availableClasses.find(
+        (classItem) => classItem._id === classId
       );
+
+      if (!classToBook) {
+        console.error("Class not found.");
+        alert("Class not found.");
+        return;
+      }
+
+      const isAlreadyBooked = classToBook.bookedUsers.includes(userId);
 
       if (isAlreadyBooked) {
         console.log("You are already booked into this class.");
+        return;
+      }
+
+      if (classToBook.bookedUsers.length >= classToBook.capacity) {
+        console.log("Class is already at full capacity.");
+        alert("Class is already at full capacity.");
         return;
       }
 
@@ -62,6 +76,7 @@ export default function ClassesPage({ user }) {
         userId,
         status: "booked",
       };
+
       await createBooking(bookingData);
       log("Class booked successfully");
 
