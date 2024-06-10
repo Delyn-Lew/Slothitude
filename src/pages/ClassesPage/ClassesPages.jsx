@@ -21,7 +21,6 @@ export default function ClassesPage({ user }) {
         log("Fetched classes:", classes);
         setAvailableClasses(classes);
 
-        // Set booked classes
         const userBookedClasses = classes
           .filter((classItem) => classItem.bookedUsers.includes(userId))
           .map((classItem) => classItem._id);
