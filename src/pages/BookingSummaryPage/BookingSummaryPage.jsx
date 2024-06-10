@@ -33,9 +33,10 @@ export default function BookingSummaryPage({ user }) {
                 <th className="px-4 py-2 text-left">Name</th>
                 <th className="px-4 py-2 text-left">Date</th>
                 <th className="px-4 py-2 text-left">Time</th>
-                <th className="px-4 py-2 text-left">Duration</th>
                 <th className="px-4 py-2 text-left">Location</th>
                 <th className="px-4 py-2 text-left">Instructor</th>
+                <th className="px-4 py-2 text-left">Duration</th>
+                <th className="px-4 py-2 text-left">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -55,13 +56,16 @@ export default function BookingSummaryPage({ user }) {
                       : "N/A"}
                   </td>
                   <td className="border px-4 py-2">
-                    {booking.classId?.duration || "N/A"}
-                  </td>
-                  <td className="border px-4 py-2">
                     {booking.classId?.location || "N/A"}
                   </td>
                   <td className="border px-4 py-2">
                     {booking.classId?.instructor || "N/A"}
+                  </td>
+                  <td className="border px-4 py-2">
+                    {booking.classId?.duration || "N/A"}
+                  </td>
+                  <td className="border px-4 py-2">
+                    {booking.status || "N/A"}
                   </td>
                 </tr>
               ))}
