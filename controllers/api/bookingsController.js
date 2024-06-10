@@ -5,8 +5,7 @@ const Class = require("../../models/class");
 const create = async (req, res) => {
   try {
     const bookingData = req.body;
-    const classId = bookingData.classId;
-    const userId = bookingData.userId;
+    const { classId, userId } = bookingData;
 
     const classItem = await Class.findById(classId);
     if (!classItem) {
@@ -14,7 +13,6 @@ const create = async (req, res) => {
     }
 
     const bookingCount = await Booking.countDocuments({ classId });
-
     if (bookingCount >= classItem.capacity) {
       return res.status(400).json({ error: "Class is fully booked" });
     }
@@ -37,12 +35,14 @@ const create = async (req, res) => {
 
 const getByUser = async (req, res) => {
   try {
-    const bookings = await Booking.find({ userId: req.user._id }).populate(
-      "classId"
-    );
+    const { id: userId } = req.params;
+    debug("Fetching bookings for user: %s", userId);
+    const bookings = await Booking.find({ userId }).populate("classId");
+    debug("Fetched bookings: %o", bookings);
     res.status(200).json(bookings);
   } catch (error) {
-    res.status(500).json({ error });
+    debug("Error fetching bookings for user: %o", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -51,7 +51,7 @@ const getBookedClasses = async (req, res) => {
     const bookedClasses = await Class.find({ bookedCount: { $gt: 0 } });
     res.status(200).json(bookedClasses);
   } catch (error) {
-    res.status(500).json({ error });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

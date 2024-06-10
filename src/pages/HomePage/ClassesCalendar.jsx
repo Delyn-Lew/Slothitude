@@ -89,7 +89,7 @@ const ClassCalendar = () => {
   return (
     <div>
       <div style={{ marginBottom: "10px" }}>
-        <label htmlFor="location">Filter by Location:</label>
+        <label htmlFor="location">Filter by ocation:</label>
         <select id="location" onChange={handleLocationChange}>
           <option value="">All Locations</option>
           {Array.from(

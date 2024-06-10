@@ -23,6 +23,20 @@ export const getBookings = async () => {
     return bookings;
   } catch (error) {
     log("Error fetching bookings: %o", error);
+    throw error;
+  }
+};
+
+export const fetchUserBookings = async (userId) => {
+  if (!userId) throw new Error("User ID is required to fetch bookings");
+  try {
+    log(`Fetching bookings for user: ${userId}`);
+    const bookings = await bookingsAPI.getUserBookings(userId);
+    log("Fetched user bookings: %o", bookings);
+    return bookings;
+  } catch (error) {
+    log("Error fetching user bookings: %o", error);
+    throw error;
   }
 };
 
@@ -34,6 +48,7 @@ export const cancelBooking = async (classId, userId) => {
     return response;
   } catch (error) {
     log("Error canceling booking: %o", error);
+    123;
     throw error;
   }
 };

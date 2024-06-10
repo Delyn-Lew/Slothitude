@@ -15,6 +15,8 @@ export default function NavBar({ setUser }) {
       &nbsp; | &nbsp;
       <NavLink to="/classes/avail">Available Classes</NavLink>
       &nbsp; | &nbsp;
+      <NavLink to="/booking-summary">My Bookings </NavLink>
+      &nbsp; | &nbsp;
       <Link to="" onClick={handleLogOut}>
         Log Out
       </Link>

@@ -9,6 +9,11 @@ export function createBooking(bookingData) {
 export function getBookings() {
   return sendRequest(BASE_URL);
 }
+
+export function getUserBookings(userId) {
+  return sendRequest(`${BASE_URL}/user/${userId}`);
+}
+
 export function cancelBooking(classId, userId) {
   return sendRequest(`${BASE_URL}/${classId}/${userId}`, "DELETE");
 }
