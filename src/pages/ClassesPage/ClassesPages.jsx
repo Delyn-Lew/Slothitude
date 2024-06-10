@@ -8,6 +8,7 @@ const log = debug("slothitude:pages:ClassesPage");
 
 export default function ClassesPage({ user }) {
   const [availableClasses, setAvailableClasses] = useState([]);
+  const [bookedClasses, setBookedClasses] = useState([]);
   const navigate = useNavigate();
   const userId = user ? user._id : null;
   const role = user ? user.role : null;
@@ -19,12 +20,18 @@ export default function ClassesPage({ user }) {
         const classes = await fetchClasses();
         log("Fetched classes:", classes);
         setAvailableClasses(classes);
+
+        // Set booked classes
+        const userBookedClasses = classes
+          .filter((classItem) => classItem.bookedUsers.includes(userId))
+          .map((classItem) => classItem._id);
+        setBookedClasses(userBookedClasses);
       } catch (error) {
         log("Error fetching classes", error);
       }
     };
     getClasses();
-  }, []);
+  }, [userId]);
 
   const handleClickClass = (classId) => {
     navigate(`/classes/${classId}`);
@@ -47,7 +54,6 @@ export default function ClassesPage({ user }) {
 
   const handleBookClass = async (classId) => {
     try {
-      // Find the class details
       const classToBook = availableClasses.find(
         (classItem) => classItem._id === classId
       );
@@ -58,10 +64,9 @@ export default function ClassesPage({ user }) {
         return;
       }
 
-      const isAlreadyBooked = classToBook.bookedUsers.includes(userId);
-
-      if (isAlreadyBooked) {
+      if (bookedClasses.includes(classId)) {
         console.log("You are already booked into this class.");
+        alert("You are already booked into this class.");
         return;
       }
 
@@ -79,9 +84,9 @@ export default function ClassesPage({ user }) {
 
       await createBooking(bookingData);
       log("Class booked successfully");
+      alert("Class booked successfully!");
 
-      const classes = await fetchClasses();
-      setAvailableClasses(classes);
+      setBookedClasses((prevBookedClasses) => [...prevBookedClasses, classId]);
     } catch (error) {
       console.error("Error booking class:", error);
     }
@@ -92,8 +97,9 @@ export default function ClassesPage({ user }) {
       await cancelBooking(classId, userId);
       log("Booking canceled successfully");
 
-      const classes = await fetchClasses();
-      setAvailableClasses(classes);
+      setBookedClasses((prevBookedClasses) =>
+        prevBookedClasses.filter((id) => id !== classId)
+      );
     } catch (error) {
       console.error("Error canceling booking:", error);
     }
@@ -142,7 +148,7 @@ export default function ClassesPage({ user }) {
                     </button>
                   )}
                   {role !== "studioOwner" &&
-                    (classItem.bookedUsers.includes(userId) ? (
+                    (bookedClasses.includes(classItem._id) ? (
                       <button
                         onClick={() => handleCancelBooking(classItem._id)}
                         className="bg-red-500 text-white px-4 py-2 rounded"

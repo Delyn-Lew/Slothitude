@@ -3,18 +3,42 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { getToken } from "../../utilities/users-service";
+import Modal from "react-modal";
 
 // Initialize localizer using moment.js to interpret dates and times
 const localizer = momentLocalizer(moment);
 
+// Custom styles for the modal
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    width: "500px",
+    padding: "20px",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+    borderRadius: "8px",
+    backgroundColor: "#fff",
+    zIndex: 1001,
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 1000,
+  },
+};
+
 const ClassCalendar = () => {
   const [classes, setClasses] = useState([]);
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchClasses();
   }, []);
 
-  // Fetch classes from the backend API
   const fetchClasses = async () => {
     try {
       const token = getToken();
@@ -29,24 +53,24 @@ const ClassCalendar = () => {
         throw new Error("Failed to fetch classes");
       }
       const data = await response.json();
-      console.log("Fetched classes:", data); // Log fetched data
       setClasses(data);
     } catch (error) {
       console.error("Error fetching classes:", error);
     }
   };
 
-  console.log("Classes:", classes); // Log classes to verify data
+  const handleSelectEvent = (event) => {
+    setSelectedClass(classes.find((classItem) => classItem._id === event.id));
+    setIsModalOpen(true);
+  };
 
-  // Convert start and end dates to JavaScript Date objects
   const events = classes.map((classItem) => ({
     id: classItem._id,
     title: classItem.name,
-    start: new Date(classItem.date), // Convert to Date object
-    end: new Date(classItem.date), // Convert to Date object
+    start: new Date(classItem.date),
+    end: new Date(classItem.date),
   }));
 
-  console.log("Events:", events); // Log events to verify date conversion
   return (
     <div>
       {classes.length === 0 ? (
@@ -55,10 +79,59 @@ const ClassCalendar = () => {
         <Calendar
           localizer={localizer}
           events={events}
-          startAccessor="start" // Ensure this matches the property name in the event objects
-          endAccessor="end" // Ensure this matches the property name in the event objects
+          startAccessor="start"
+          endAccessor="end"
           style={{ height: 500 }}
+          onSelectEvent={handleSelectEvent}
         />
+      )}
+
+      {selectedClass && (
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+          style={customStyles}
+          contentLabel="Class Details"
+        >
+          <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+            {selectedClass.name}
+          </h2>
+          <p>
+            <strong>Date:</strong>{" "}
+            {moment(selectedClass.date).format("MMMM Do YYYY, h:mm A")}
+          </p>
+          <p>
+            <strong>Description:</strong> {selectedClass.description}
+          </p>
+          <p>
+            <strong>Location:</strong> {selectedClass.location}
+          </p>
+          <p>
+            <strong>Capacity:</strong> {selectedClass.bookedUsers.length}/
+            {selectedClass.capacity}
+          </p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "20px",
+            }}
+          >
+            <button
+              onClick={() => setIsModalOpen(false)}
+              style={{
+                backgroundColor: "#6c757d",
+                color: "#fff",
+                border: "none",
+                padding: "10px 20px",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </Modal>
       )}
     </div>
   );
