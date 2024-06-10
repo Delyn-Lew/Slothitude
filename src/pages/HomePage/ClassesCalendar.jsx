@@ -8,7 +8,6 @@ import Modal from "react-modal";
 // Initialize localizer using moment.js to interpret dates and times
 const localizer = momentLocalizer(moment);
 
-// Custom styles for the modal
 const customStyles = {
   content: {
     top: "50%",
@@ -34,6 +33,7 @@ const ClassCalendar = () => {
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   useEffect(() => {
     fetchClasses();
@@ -64,15 +64,44 @@ const ClassCalendar = () => {
     setIsModalOpen(true);
   };
 
-  const events = classes.map((classItem) => ({
-    id: classItem._id,
-    title: classItem.name,
-    start: new Date(classItem.date),
-    end: new Date(classItem.date),
-  }));
+  const handleLocationChange = (event) => {
+    setSelectedLocation(event.target.value);
+  };
+
+  const filteredEvents = selectedLocation
+    ? classes.filter((classItem) => classItem.location === selectedLocation)
+    : classes;
+
+  const events = filteredEvents.map((classItem) => {
+    const startTime = new Date(classItem.date);
+    const endTime = moment(startTime)
+      .add(classItem.duration, "minutes")
+      .toDate();
+
+    return {
+      id: classItem._id,
+      title: classItem.name,
+      start: startTime,
+      end: endTime,
+    };
+  });
 
   return (
     <div>
+      <div style={{ marginBottom: "10px" }}>
+        <label htmlFor="location">Filter by Location:</label>
+        <select id="location" onChange={handleLocationChange}>
+          <option value="">All Locations</option>
+          {Array.from(
+            new Set(classes.map((classItem) => classItem.location))
+          ).map((location) => (
+            <option key={location} value={location}>
+              {location}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {classes.length === 0 ? (
         <p>No classes available</p>
       ) : (
@@ -98,7 +127,7 @@ const ClassCalendar = () => {
           </h2>
           <p>
             <strong>Date:</strong>{" "}
-            {moment(selectedClass.date).format("MMMM Do YYYY, h:mm A")}
+            {moment(selectedClass.date).format("Do MMMM YYYY, h:mm A")}
           </p>
           <p>
             <strong>Description:</strong> {selectedClass.description}
