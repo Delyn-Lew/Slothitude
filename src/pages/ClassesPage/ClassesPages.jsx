@@ -83,7 +83,6 @@ export default function ClassesPage({ user }) {
 
       await createBooking(bookingData);
       log("Class booked successfully");
-      alert("Class booked successfully!");
 
       setBookedClasses((prevBookedClasses) => [...prevBookedClasses, classId]);
     } catch (error) {
