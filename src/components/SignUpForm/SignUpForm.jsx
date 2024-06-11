@@ -18,7 +18,6 @@ export default class SignUpForm extends Component {
 
   handleChange = (event) => {
     const { name, value } = event.target;
-
     this.setState({ ...this.state, [name]: value });
   };
 
@@ -39,103 +38,149 @@ export default class SignUpForm extends Component {
 
   render() {
     return (
-      <form
-        className="flex min-h-screen items-center justify-center"
-        onSubmit={this.handleSubmit}
-      >
-        <fieldset className="bg-white bg-opacity-70 border-slate-400 drop-shadow-2xl border-opacity-35 shadow-2xl shadow-neutral-400 rounded-lg flex justify-center flex-col mb-10 space-y-3 p-5 w-2/6 sm:w-1/3">
-          <legend className="font-black block mb-2 text-sm  text-gray-900">
-            Sign Up
-          </legend>
-          <div className="m-0 p-0">
-            <label className="drop-shadow-sm text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col m-5 items-center">
-              Name:
-              <Input
-                type="text"
-                name="name"
-                value={this.state.name}
-                onChange={this.handleChange}
-              />
-            </label>
-          </div>
-          <div className="m-0 p-0">
-            <label className="drop-shadow-sm text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col m-5 items-center">
-              Email:
-              <Input
-                type="email"
-                name="email"
-                value={this.state.email}
-                onChange={this.handleChange}
-              />
-            </label>
-          </div>
-          <div className="relative m-0 p-0">
-            <label className="drop-shadow-sm text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col m-5 items-center">
-              Password:
-              <Input
-                type={this.props.showPassword ? "text" : "password"}
-                name="password"
-                value={this.state.password}
-                onChange={this.handleChange}
-              />
-            </label>
-            {this.props.showPassword ? (
-              <EyeSlashIcon
-                onClick={this.props.togglePW}
-                className="w-4 h-4 absolute right-3 top-12"
-              />
-            ) : (
-              <EyeIcon
-                onClick={this.props.togglePW}
-                className="h-4 w-4 absolute right-3 top-12"
-              />
-            )}
-          </div>
-          <div className="relative m-0 p-0">
-            <label className="drop-shadow-sm text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col m-5 items-center">
-              Confirm:
-              <Input
-                type={this.props.showPassword ? "text" : "password"}
-                name="confirm"
-                value={this.state.confirm}
-                onChange={this.handleChange}
-              />
-            </label>
-            {this.props.showPassword ? (
-              <EyeSlashIcon
-                onClick={this.props.togglePW}
-                className="w-4 h-4 absolute right-3 top-12"
-              />
-            ) : (
-              <EyeIcon
-                onClick={this.props.togglePW}
-                className="h-4 w-4 absolute right-3 top-12"
-              />
-            )}
-          </div>
-          <div className="m-0 p-0">
-            <label className="drop-shadow-sm text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col m-5 items-center">
-              Role:
-              <select
-                name="role"
-                value={this.state.role}
-                onChange={this.handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm flex flex-col items-center">
+          <img
+            className="mx-auto h-32 w-auto"
+            src="/Slothitude.png"
+            alt="Slothitude Logo"
+          />
+          <p className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 mt-4">
+            Register here for an account
+          </p>
+        </div>
+
+        <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form className="space-y-6" onSubmit={this.handleSubmit}>
+            <div>
+              <label className="block text-sm font-medium leading-6 text-gray-900">
+                Name
+              </label>
+              <div className="mt-2">
+                <Input
+                  type="text"
+                  name="name"
+                  value={this.state.name}
+                  onChange={this.handleChange}
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium leading-6 text-gray-900">
+                Email address
+              </label>
+              <div className="mt-2">
+                <Input
+                  type="email"
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium leading-6 text-gray-900">
+                Password
+              </label>
+              <div className="relative mt-2">
+                <Input
+                  type={this.props.showPassword ? "text" : "password"}
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.handleChange}
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+                {this.props.showPassword ? (
+                  <EyeSlashIcon
+                    onClick={this.props.togglePW}
+                    className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                  />
+                ) : (
+                  <EyeIcon
+                    onClick={this.props.togglePW}
+                    className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                  />
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium leading-6 text-gray-900">
+                Confirm Password
+              </label>
+              <div className="relative mt-2">
+                <Input
+                  type={this.props.showPassword ? "text" : "password"}
+                  name="confirm"
+                  value={this.state.confirm}
+                  onChange={this.handleChange}
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+                {this.props.showPassword ? (
+                  <EyeSlashIcon
+                    onClick={this.props.togglePW}
+                    className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                  />
+                ) : (
+                  <EyeIcon
+                    onClick={this.props.togglePW}
+                    className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                  />
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium leading-6 text-gray-900">
+                Role
+              </label>
+              <div className="mt-2">
+                <select
+                  name="role"
+                  value={this.state.role}
+                  onChange={this.handleChange}
+                  className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                >
+                  <option value="user">User</option>
+                  <option value="studioOwner">Studio Owner</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                <option value="user">User</option>
-                <option value="studioOwner">Studio Owner</option>
-              </select>
-            </label>
-          </div>
-          <button
-            type="submit"
-            className="ring-offset-background focus-visible:ring-ring flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
-          >
-            Sign Up
-          </button>
-          <p className="text-red-600">{this.state.error} </p>
-        </fieldset>
-      </form>
+                Sign Up
+              </button>
+            </div>
+            {this.state.error && (
+              <p className="text-red-600 text-sm text-center mt-4">
+                {this.state.error}
+              </p>
+            )}
+          </form>
+
+          <p className="mt-10 text-center text-sm text-gray-500">
+            Already have an account?{" "}
+            <a
+              href=""
+              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            >
+              Sign In
+            </a>
+          </p>
+        </div>
+      </div>
     );
   }
 }

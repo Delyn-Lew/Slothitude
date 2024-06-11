@@ -35,58 +35,86 @@ export default function LoginForm({
   };
 
   return (
-    <form
-      className="flex min-h-screen items-center justify-center"
-      onSubmit={handleSubmit}
-    >
-      <fieldset className="bg-white bg-opacity-70 border-slate-400 drop-shadow-2xl border-opacity-35 shadow-2xl shadow-neutral-400 rounded-lg flex justify-center flex-col mb-10 space-y-3 p-5">
-        <legend className="font-black block mb-2 text-sm  text-gray-900">
-          Login
-        </legend>
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm flex flex-col items-center">
+        <img
+          className="mx-auto h-32 w-auto"
+          src="/Slothitude.png"
+          alt="Slothitude Logo"
+        />
+        <p className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 mt-4">
+          Sign in to your account
+        </p>
+      </div>
 
-        <label className="drop-shadow-sm text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col m-5 items-center">
-          Email:
-          <Input type="email" name="email" />
-        </label>
-        <div className="relative">
-          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col m-5 items-center">
-            Password:
-            <Input type={showPassword ? "text" : "password"} name="password" />
-            {showPassword ? (
-              <EyeSlashIcon
-                onClick={togglePW}
-                className="h-4 w-4 absolute right-3 top-12"
+      <div className="mt-3 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label className="block text-sm font-medium leading-6 text-gray-900">
+              Email address
+            </label>
+            <div className="mt-2">
+              <Input
+                type="email"
+                name="email"
+                required
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-            ) : (
-              <EyeIcon
-                onClick={togglePW}
-                className="h-4 w-4 absolute right-3 top-12"
-              />
-            )}
-          </label>
-        </div>
-        <button
-          className="ring-offset-background focus-visible:ring-ring flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
-          type="submit"
-        >
-          Login
-        </button>
-        {error && (
-          <div className="flex justify-start">
-            {" "}
-            <p className="w-full text-red-600">{error}</p>
+            </div>
           </div>
-        )}
-        <div className="flex justify-center flex-col items-center">
-          <p className="text-xs mb-1 font-semibold">Register Here!</p>
-          <button
+
+          <div>
+            <div className="flex items-center justify-between">
+              <label className="block text-sm font-medium leading-6 text-gray-900">
+                Password
+              </label>
+            </div>
+            <div className="relative mt-2">
+              <Input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                required
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+              <div className="absolute inset-y-0 right-0 pr-0 flex items-center">
+                {showPassword ? (
+                  <EyeSlashIcon
+                    onClick={togglePW}
+                    className="h-5 w-5 text-gray-400 cursor-pointer"
+                  />
+                ) : (
+                  <EyeIcon
+                    onClick={togglePW}
+                    className="h-5 w-5 text-gray-400 cursor-pointer"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Sign In
+            </button>
+          </div>
+          {error && (
+            <p className="text-red-600 text-sm text-center mt-4">{error}</p>
+          )}
+        </form>
+
+        <p className="mt-10 text-center text-sm text-gray-500">
+          Not a member?{" "}
+          <a
             onClick={onSignUp}
-            className="cursor-pointer drop-shadow-md w-20 border-1 border-opacity-40 border-slate-400 text-purple-60 rounded-md hover:drop-shadow-2xl hover:bg-neutral-200 shadow-black-700 text-purple-600 text-12px text-center"
+            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"
           >
-            Sign Up
-          </button>
-        </div>
-      </fieldset>
-    </form>
+            Register here!
+          </a>
+        </p>
+      </div>
+    </div>
   );
 }
