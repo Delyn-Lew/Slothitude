@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import debug from "debug";
 import { fetchClasses, deleteClass } from "../../utilities/classes-service";
 import { createBooking, cancelBooking } from "../../utilities/bookings-service";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const log = debug("slothitude:pages:ClassesPage");
 
@@ -46,8 +48,12 @@ export default function ClassesPage({ user }) {
       setAvailableClasses((prevClasses) =>
         prevClasses.filter((classItem) => classItem._id !== classId)
       );
+      toast.success("Class deleted successfully");
     } catch (error) {
       console.error("Error deleting class:", error);
+      toast.error("Error deleting class", {
+        position: "bottom-right",
+      });
     }
   };
 
@@ -59,19 +65,21 @@ export default function ClassesPage({ user }) {
 
       if (!classToBook) {
         console.error("Class not found.");
-        alert("Class not found.");
+        toast.error("Class not found.");
         return;
       }
 
       if (bookedClasses.includes(classId)) {
         console.log("You are already booked into this class.");
-        alert("You are already booked into this class.");
+        toast.info("You are already booked into this class.");
         return;
       }
 
       if (classToBook.bookedUsers.length >= classToBook.capacity) {
         console.log("Class is already at full capacity.");
-        alert("Class is already at full capacity.");
+        toast.error("Class is already at full capacity.", {
+          position: "bottom-right",
+        });
         return;
       }
 
@@ -83,10 +91,16 @@ export default function ClassesPage({ user }) {
 
       await createBooking(bookingData);
       log("Class booked successfully");
+      toast.success("Class booked successfully", {
+        position: "bottom-right",
+      });
 
       setBookedClasses((prevBookedClasses) => [...prevBookedClasses, classId]);
     } catch (error) {
       console.error("Error booking class:", error);
+      toast.error("Error booking class", {
+        position: "bottom-right",
+      });
     }
   };
 
@@ -94,18 +108,23 @@ export default function ClassesPage({ user }) {
     try {
       await cancelBooking(classId, userId);
       log("Booking canceled successfully");
+      toast.success("Booking canceled successfully", {
+        position: "bottom-right",
+      });
 
       setBookedClasses((prevBookedClasses) =>
         prevBookedClasses.filter((id) => id !== classId)
       );
     } catch (error) {
       console.error("Error canceling booking:", error);
+      toast.error("Error canceling booking");
     }
   };
 
   return (
     <div className="flex justify-center">
       <section className="text-xl bg-white bg-opacity-80 w-[100rem] p-5 rounded-lg flex flex-col justify-center items-center drop-shadow-xl">
+        <ToastContainer limit={1} />
         <h2 className="text-center">Available Classes</h2>
         {role === "studioOwner" && (
           <button
