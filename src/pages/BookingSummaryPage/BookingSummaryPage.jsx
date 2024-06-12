@@ -14,18 +14,24 @@ export default function BookingSummaryPage({ user }) {
         log("Fetching user bookings");
         const bookings = await fetchUserBookings(userId);
         log("Fetched bookings:", bookings);
+
         // Filter classes into upcoming and passed classes
         const upcomingClasses = [];
         const passedClasses = [];
         const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to start of the day
+
         bookings.forEach((booking) => {
           const classDate = new Date(booking.classId?.date);
+          classDate.setHours(0, 0, 0, 0); // Set to start of the day
+
           if (classDate < today) {
             passedClasses.push(booking);
           } else {
             upcomingClasses.push(booking);
           }
         });
+
         // Concatenate upcoming and passed classes
         const sortedBookings = upcomingClasses.concat(passedClasses);
         setBookedClasses(sortedBookings);
@@ -73,10 +79,11 @@ export default function BookingSummaryPage({ user }) {
                   <tr
                     key={booking._id}
                     className={`${
-                      new Date(booking.classId?.date) < new Date()
+                      new Date(booking.classId?.date).setHours(0, 0, 0, 0) <
+                      new Date().setHours(0, 0, 0, 0)
                         ? "text-gray-600 bg-gray-200"
-                        : ""
-                    } bg-white border-b dark:bg-gray-800 dark:border-gray-700`}
+                        : "bg-white"
+                    } border-b dark:bg-gray-800 dark:border-gray-700`}
                   >
                     <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {booking.classId?.name || "N/A"}
