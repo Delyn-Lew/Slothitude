@@ -23,7 +23,9 @@ export default function BookingSummaryPage({ user }) {
   }, [userId]);
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mt-16">
+      {" "}
+      {/* Add margin-top to push content down */}
       <section className="text-xl bg-white bg-opacity-80 w-[100rem] p-5 rounded-lg flex flex-col justify-center items-center drop-shadow-xl">
         <h2 className="text-center">My Bookings</h2>
         {bookedClasses.length > 0 ? (

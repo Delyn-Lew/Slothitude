@@ -122,7 +122,8 @@ export default function ClassesPage({ user }) {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mt-16">
+      {" "}
       <section className="text-xl bg-white bg-opacity-80 w-[100rem] p-5 rounded-lg flex flex-col justify-center items-center drop-shadow-xl">
         <ToastContainer limit={1} />
         <h2 className="text-center">Available Classes</h2>

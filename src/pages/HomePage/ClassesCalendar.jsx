@@ -87,7 +87,8 @@ const ClassCalendar = () => {
   });
 
   return (
-    <div>
+    <div className="mt-16">
+      {" "}
       <div style={{ marginBottom: "10px" }}>
         <label htmlFor="location">Filter by Location:</label>
         <select id="location" onChange={handleLocationChange}>
@@ -101,7 +102,6 @@ const ClassCalendar = () => {
           ))}
         </select>
       </div>
-
       {classes.length === 0 ? (
         <p>No classes available</p>
       ) : (
@@ -114,7 +114,6 @@ const ClassCalendar = () => {
           onSelectEvent={handleSelectEvent}
         />
       )}
-
       {selectedClass && (
         <Modal
           isOpen={isModalOpen}
