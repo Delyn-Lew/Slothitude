@@ -24,55 +24,71 @@ export default function BookingSummaryPage({ user }) {
 
   return (
     <div className="flex justify-center mt-16">
-      {" "}
       {/* Add margin-top to push content down */}
       <section className="text-xl bg-white bg-opacity-80 w-[100rem] p-5 rounded-lg flex flex-col justify-center items-center drop-shadow-xl">
         <h2 className="text-center">My Bookings</h2>
         {bookedClasses.length > 0 ? (
-          <table className="w-full table-auto">
-            <thead>
-              <tr>
-                <th className="px-4 py-2 text-left">Name</th>
-                <th className="px-4 py-2 text-left">Date</th>
-                <th className="px-4 py-2 text-left">Time</th>
-                <th className="px-4 py-2 text-left">Location</th>
-                <th className="px-4 py-2 text-left">Instructor</th>
-                <th className="px-4 py-2 text-left">Duration</th>
-                <th className="px-4 py-2 text-left">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bookedClasses.map((booking) => (
-                <tr key={booking._id}>
-                  <td className="border px-4 py-2">
-                    {booking.classId?.name || "N/A"}
-                  </td>
-                  <td className="border px-4 py-2">
-                    {booking.classId?.date
-                      ? new Date(booking.classId.date).toLocaleDateString()
-                      : "N/A"}
-                  </td>
-                  <td className="border px-4 py-2">
-                    {booking.classId?.date
-                      ? new Date(booking.classId.date).toLocaleTimeString()
-                      : "N/A"}
-                  </td>
-                  <td className="border px-4 py-2">
-                    {booking.classId?.location || "N/A"}
-                  </td>
-                  <td className="border px-4 py-2">
-                    {booking.classId?.instructor || "N/A"}
-                  </td>
-                  <td className="border px-4 py-2">
-                    {booking.classId?.duration || "N/A"}
-                  </td>
-                  <td className="border px-4 py-2">
-                    {booking.status || "N/A"}
-                  </td>
+          <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    Name
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Date
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Time
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Location
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Instructor
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Duration
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Status
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {bookedClasses.map((booking) => (
+                  <tr
+                    key={booking._id}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  >
+                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {booking.classId?.name || "N/A"}
+                    </td>
+                    <td className="px-6 py-4">
+                      {booking.classId?.date
+                        ? new Date(booking.classId.date).toLocaleDateString()
+                        : "N/A"}
+                    </td>
+                    <td className="px-6 py-4">
+                      {booking.classId?.date
+                        ? new Date(booking.classId.date).toLocaleTimeString()
+                        : "N/A"}
+                    </td>
+                    <td className="px-6 py-4">
+                      {booking.classId?.location || "N/A"}
+                    </td>
+                    <td className="px-6 py-4">
+                      {booking.classId?.instructor || "N/A"}
+                    </td>
+                    <td className="px-6 py-4">
+                      {booking.classId?.duration || "N/A"}
+                    </td>
+                    <td className="px-6 py-4">{booking.status || "N/A"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <p>No bookings found.</p>
         )}
