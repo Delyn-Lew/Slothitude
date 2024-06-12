@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createClass } from "../../utilities/classes-service";
+import { toast } from "react-toastify";
 
 export default function AddClassForm() {
   const [classData, setClassData] = useState({
@@ -25,6 +26,7 @@ export default function AddClassForm() {
     e.preventDefault();
     try {
       await createClass(classData);
+      toast.success("Class created successfully!!");
       setClassData({
         name: "",
         description: "",
@@ -37,6 +39,7 @@ export default function AddClassForm() {
       });
     } catch (error) {
       console.error("Error creating class:", error);
+      toast.error("Error creating class, try again please!");
     }
   };
 
