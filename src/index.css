@@ -7,3 +7,10 @@
 * {
   font-family: "Comfortaa", sans-serif;
 }
+
+body {
+  background-image: url("/SlothitudeBackground.png");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
