@@ -105,10 +105,23 @@ const ClassCalendar = () => {
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       <div className="mt-16">
-        {" "}
         <div style={{ marginBottom: "10px" }}>
-          <label htmlFor="location">Filter by Location:</label>
-          <select id="location" onChange={handleLocationChange}>
+          <label
+            htmlFor="location"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+          >
+            Filter by Location:
+          </label>
+          <select
+            id="location"
+            onChange={handleLocationChange}
+            className="text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+            style={{
+              backgroundColor: "#73576D",
+              borderColor: "#73576D",
+              width: "200px",
+            }}
+          >
             <option value="">All Locations</option>
             {Array.from(
               new Set(classes.map((classItem) => classItem.location))
