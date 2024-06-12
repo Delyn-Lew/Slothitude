@@ -72,17 +72,29 @@ const ClassCalendar = () => {
     ? classes.filter((classItem) => classItem.location === selectedLocation)
     : classes;
 
+  const currentDate = new Date();
+
   const events = filteredEvents.map((classItem) => {
     const startTime = new Date(classItem.date);
     const endTime = moment(startTime)
       .add(classItem.duration, "minutes")
       .toDate();
 
+    const isPastEvent = startTime < currentDate;
+
+    const eventStyle = {
+      backgroundColor: isPastEvent ? "#CCA986" : "#73576D",
+      color: "#FFFFFF",
+      borderRadius: "4px",
+      border: "none",
+    };
+
     return {
       id: classItem._id,
       title: classItem.name,
       start: startTime,
       end: endTime,
+      style: eventStyle, // Assign the style to the event
     };
   });
 
@@ -112,6 +124,15 @@ const ClassCalendar = () => {
           endAccessor="end"
           style={{ height: 500 }}
           onSelectEvent={handleSelectEvent}
+          // eslint-disable-next-line no-unused-vars
+          eventPropGetter={(event, start, end, isSelected) => ({
+            style: {
+              backgroundColor: event.style.backgroundColor,
+              color: event.style.color,
+              borderRadius: event.style.borderRadius,
+              border: event.style.border,
+            },
+          })}
         />
       )}
       {selectedClass && (
