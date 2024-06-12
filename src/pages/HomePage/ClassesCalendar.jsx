@@ -104,7 +104,7 @@ const ClassCalendar = () => {
       className="background-container"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <div className="mt-16">
+      <div className="mt-164">
         <div style={{ marginBottom: "10px" }}>
           <label
             htmlFor="location"
