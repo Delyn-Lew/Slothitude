@@ -16,14 +16,24 @@ export default function ClassesPage({ user }) {
   const role = user ? user.role : null;
 
   useEffect(() => {
+    const isClassExpired = (classItem) => {
+      const classDateTime = new Date(classItem.date);
+      const now = new Date();
+      return classDateTime < now;
+    };
+
     const getClasses = async () => {
       try {
         log("Fetching available classes");
         const classes = await fetchClasses();
         log("Fetched classes:", classes);
-        setAvailableClasses(classes);
 
-        const userBookedClasses = classes
+        const filteredClasses = classes.filter(
+          (classItem) => !isClassExpired(classItem)
+        );
+        setAvailableClasses(filteredClasses);
+
+        const userBookedClasses = filteredClasses
           .filter((classItem) => classItem.bookedUsers.includes(userId))
           .map((classItem) => classItem._id);
         setBookedClasses(userBookedClasses);
@@ -33,10 +43,6 @@ export default function ClassesPage({ user }) {
     };
     getClasses();
   }, [userId]);
-
-  const handleClickClass = (classId) => {
-    navigate(`/classes/${classId}`);
-  };
 
   const handleAddClass = () => {
     navigate("/add-class");
@@ -122,8 +128,7 @@ export default function ClassesPage({ user }) {
   };
 
   return (
-    <div className="flex justify-center mt-16">
-      {" "}
+    <div className="flex justify-center mt-16 space-y-8">
       <section className="text-xl bg-white bg-opacity-80 w-[100rem] p-5 rounded-lg flex flex-col justify-center items-center drop-shadow-xl">
         <ToastContainer limit={1} />
         <h2 className="text-center">Available Classes</h2>
@@ -136,26 +141,20 @@ export default function ClassesPage({ user }) {
           </button>
         )}
         {availableClasses.length > 0 ? (
-          <ul>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {availableClasses.map((classItem) => (
-              <li
+              <div
                 key={classItem._id}
-                className="flex justify-between items-center border-b border-gray-200 py-2"
+                className="border border-gray-200 rounded-lg overflow-hidden shadow-md p-4"
               >
-                <div
-                  onClick={() => handleClickClass(classItem._id)}
-                  style={{ cursor: "pointer" }}
-                  className="flex-1"
-                >
-                  <h3 className="font-bold">{classItem.name}</h3>
-                  <p>{classItem.description}</p>
-                  <p>Date: {new Date(classItem.date).toLocaleDateString()}</p>
-                  <p>Time: {new Date(classItem.date).toLocaleTimeString()}</p>
-                  <p>Location: {classItem.location}</p>
-                  <p>Instructor: {classItem.instructor}</p>
-                  <p>Duration: {classItem.duration} minutes</p>
-                  <p>Capacity: {classItem.capacity}</p>
-                </div>
+                <h3 className="font-bold">{classItem.name}</h3>
+                <p>{classItem.description}</p>
+                <p>Date: {new Date(classItem.date).toLocaleDateString()}</p>
+                <p>Time: {new Date(classItem.date).toLocaleTimeString()}</p>
+                <p>Location: {classItem.location}</p>
+                <p>Instructor: {classItem.instructor}</p>
+                <p>Duration: {classItem.duration} minutes</p>
+                <p>Capacity: {classItem.capacity}</p>
                 <div className="flex space-x-2">
                   {role === "studioOwner" && (
                     <button
@@ -182,9 +181,9 @@ export default function ClassesPage({ user }) {
                       </button>
                     ))}
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         ) : (
           <p>No available classes found.</p>
         )}
