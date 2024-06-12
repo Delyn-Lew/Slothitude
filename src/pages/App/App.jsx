@@ -1,6 +1,8 @@
 import debug from "debug";
-import { useState } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AuthPage from "../AuthPage/AuthPage";
 import ClassesPage from "../ClassesPage/ClassesPages";
 import { getUser } from "../../utilities/users-service";
@@ -11,6 +13,28 @@ import ClassDetails from "../ClassesPage/ClassDetails";
 import BookingSummaryPage from "../BookingSummaryPage/BookingSummaryPage";
 
 const log = debug("slothitude:pages:App:App");
+
+function ProtectedRoute({ user, children }) {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      toast.error("Please log in to access this page.");
+      navigate("/");
+    } else if (user.role !== "studioOwner") {
+      toast.error(
+        "Unauthorized access. Only studio owners can access this page."
+      );
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
+  if (user && user.role === "studioOwner") {
+    return children;
+  }
+
+  return null;
+}
 
 function App() {
   const [user, setUser] = useState(getUser());
@@ -35,9 +59,17 @@ function App() {
           path="/booking-summary"
           element={<BookingSummaryPage user={user} />}
         />
-        <Route path="/add-class" element={<AddClassPage />} />
         <Route path="/classes/:id" element={<ClassDetails user={user} />} />
+        <Route
+          path="/add-class"
+          element={
+            <ProtectedRoute user={user}>
+              <AddClassPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+      <ToastContainer />
     </main>
   );
 }
