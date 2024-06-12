@@ -36,7 +36,6 @@ export default function NavBar({ user, setUser }) {
           className="flex items-center space-x-3"
           style={{ textDecoration: "none" }}
         >
-          <img src="Slothitude.png" className="h-8" alt="Slothitude Logo" />
           <span
             className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
             style={{ textDecoration: "none" }}
