@@ -15,15 +15,14 @@ export default function BookingSummaryPage({ user }) {
         const bookings = await fetchUserBookings(userId);
         log("Fetched bookings:", bookings);
 
-        // Filter classes into upcoming and passed classes
         const upcomingClasses = [];
         const passedClasses = [];
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Set to start of the day
+        today.setHours(0, 0, 0, 0);
 
         bookings.forEach((booking) => {
           const classDate = new Date(booking.classId?.date);
-          classDate.setHours(0, 0, 0, 0); // Set to start of the day
+          classDate.setHours(0, 0, 0, 0);
 
           if (classDate < today) {
             passedClasses.push(booking);
@@ -32,7 +31,6 @@ export default function BookingSummaryPage({ user }) {
           }
         });
 
-        // Concatenate upcoming and passed classes
         const sortedBookings = upcomingClasses.concat(passedClasses);
         setBookedClasses(sortedBookings);
       } catch (error) {
@@ -48,8 +46,8 @@ export default function BookingSummaryPage({ user }) {
         <h2 className="text-center">My Bookings</h2>
         {bookedClasses.length > 0 ? (
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                   <th scope="col" className="px-6 py-3">
                     Name
@@ -83,9 +81,9 @@ export default function BookingSummaryPage({ user }) {
                       new Date().setHours(0, 0, 0, 0)
                         ? "text-gray-600 bg-gray-200"
                         : "bg-white"
-                    } border-b dark:bg-gray-800 dark:border-gray-700`}
+                    } border-b`}
                   >
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                       {booking.classId?.name || "N/A"}
                     </td>
                     <td className="px-6 py-4">
